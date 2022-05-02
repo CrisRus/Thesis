@@ -1,0 +1,6 @@
+__pycache__
+segmented
+test
+train
+val
+*.csv
