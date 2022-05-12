@@ -3,11 +3,12 @@ import pandas as pd
 import numpy as np
 from cv2 import imread
 from skimage.transform import resize
+from sklearn import preprocessing
 
 target = []
 flat_data = []
 images = []
-DataDirectory = 'C:\\Users\\Cristina\\Desktop\\lungs\\segmented\\train'
+DataDirectory = 'C:\\Users\\Cristina\\Desktop\\Thesis\\segmented\\train'
 
 # Images to be classified as:
 Categories = ["COVID19","NORMAL","PNEUMONIA", "TURBERCULOSIS"]
@@ -22,17 +23,16 @@ for i in Categories:
   for img in os.listdir(path):
     img_array = imread(os.path.join(path,img))
     # Skimage normalizes the value of image
-    img_resized = resize(img_array,(150,150,3))
+    img_resized = resize(img_array,(100,100,3))
     flat_data.append(img_resized.flatten())
-    images.append(img_resized)
     target.append(target_class)
 # Convert list to numpy array format
 flat_data = np.array(flat_data)
-images = np.array(images)
 target = np.array(target)
 
 
 df = pd.DataFrame(flat_data)
+df[df.columns] = preprocessing.MinMaxScaler().fit_transform(df.values)
 # Create a column for output data called Target
 df['Target'] = target
 
