@@ -4,3 +4,6 @@ test
 train
 val
 *.csv
+graphs
+marked
+resized
