@@ -8,7 +8,7 @@ from sklearn.decomposition import PCA
 import seaborn as sns
 
 
-raw_data = pd.read_csv("resized_dataset2.csv", index_col=False)
+raw_data = pd.read_csv("segmented.csv", index_col=False)
 y = raw_data['Target']
 X_raw = raw_data.drop("Target", axis=1)
 Categories = ["COVID19","NORMAL","PNEUMONIA", "TURBERCULOSIS"]
@@ -138,14 +138,14 @@ def main():
     pca = PCA()
     principal_components = pca.fit_transform(X_raw)
     # find_number_of_components(pca)
-    # find_the_number_of_clusters(principal_components, 15)
+    # find_the_number_of_clusters(principal_components, 20)
     principal_df = pd.DataFrame(data=principal_components)
     labels = []
     for code in y:
         labels.append(Categories[code])
     principal_df['Class'] = labels
     cluster_with_kmeans(4, principal_components, principal_df)
-    # show_clusters(X_raw)
+    show_clusters(X_raw)
 
 if __name__ == '__main__':
     main()

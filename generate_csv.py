@@ -8,7 +8,7 @@ from sklearn import preprocessing
 target = []
 flat_data = []
 images = []
-DataDirectory = 'C:\\Users\\rus_c\\Desktop\\Thesis\\segmented\\train'
+DataDirectory = '/Users/ruscristina/Desktop/Thesis/Thesis/segmented/train'
 
 # Images to be classified as:
 Categories = ["COVID19","NORMAL","PNEUMONIA", "TURBERCULOSIS"]
@@ -33,7 +33,7 @@ df[df.columns] = preprocessing.MinMaxScaler().fit_transform(df.values)
 # Create a column for output data called Target
 df['Target'] = target
 
-df.to_csv("./segmented2.csv", index=False)
+df.to_csv("./segmented.csv", index=False)
 
 # Category is: COVID19            Label encoded as: 0
 # Category is: NORMAL             Label encoded as: 1

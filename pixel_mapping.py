@@ -14,13 +14,13 @@ def mark_image(indexes, label):
     for file in files:
         img = cv2.imread(path.format(label)+'/'+file, 1)
         for index in indexes:
-            img[index//16*16:index//16*16+16, index%16*16:index%16*16+16] = (0, 0, 255)
+            img[index//256, index%256] = (0, 0, 255)
         cv2.imwrite("marked/{}/{}".format(label, file), img)
 
 
 
 def map_pixels(coef, labels):
-    x_axis = [i for i in range(257)]
+    x_axis = [i for i in range(65536)]
     elbow = []
     for i in range(0, 4):
         kn = KneeLocator(x_axis, sorted(coef[i], reverse=True), curve='convex', direction='decreasing')
