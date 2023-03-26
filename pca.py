@@ -8,7 +8,7 @@ from sklearn.decomposition import PCA
 import seaborn as sns
 
 
-raw_data = pd.read_csv("segmented.csv", index_col=False)
+raw_data = pd.read_csv("segmented2.csv", index_col=False)
 y = raw_data['Target']
 X_raw = raw_data.drop("Target", axis=1)
 Categories = ["COVID19","NORMAL","PNEUMONIA", "TURBERCULOSIS"]
@@ -69,18 +69,20 @@ def show_clusters(data):
 
 def find_number_of_components(pca):
 	# find number of components
-	per_var = np.round(pca.explained_variance_ratio_ * 100, decimals=1)
-	ratio_sum = 0
-	for order in range(0, len(pca.explained_variance_ratio_)):
-		ratio_sum = ratio_sum + pca.explained_variance_ratio_[order]
-		print("{0}: {1}".format(order, ratio_sum))
+    per_var = np.round(pca.explained_variance_ratio_ * 100, decimals=1)
+    ratio_sum = 0
+    for order in range(0, len(pca.explained_variance_ratio_)):
+        ratio_sum = ratio_sum + pca.explained_variance_ratio_[order]
+        print("{0}: {1}".format(order, ratio_sum))
+        if order == 5:
+            return
 
-	labels = ['PC' + str(x) for x in range(1, len(per_var) + 1)]
-	plt.bar(x=range(1, len(per_var) + 1), height=per_var, tick_label=labels)
-	plt.ylabel("Percentage of Explained Variance")
-	plt.xlabel("Principal Component")
-	plt.title("Explained variance")
-	plt.show()
+    labels = ['PC' + str(x) for x in range(1, len(per_var) + 1)]
+    plt.bar(x=range(1, len(per_var) + 1), height=per_var, tick_label=labels)
+    plt.ylabel("Percentage of Explained Variance")
+    plt.xlabel("Principal Component")
+    plt.title("Explained variance")
+    plt.show()
 
 
 def find_the_number_of_clusters(principal_components, limit):
@@ -137,15 +139,15 @@ def cluster_with_kmeans(number_of_clusters, principal_components, principal_df):
 def main():
     pca = PCA()
     principal_components = pca.fit_transform(X_raw)
-    # find_number_of_components(pca)
+    find_number_of_components(pca)
     # find_the_number_of_clusters(principal_components, 20)
-    principal_df = pd.DataFrame(data=principal_components)
-    labels = []
-    for code in y:
-        labels.append(Categories[code])
-    principal_df['Class'] = labels
-    cluster_with_kmeans(4, principal_components, principal_df)
-    show_clusters(X_raw)
+    # principal_df = pd.DataFrame(data=principal_components)
+    # labels = []
+    # for code in y:
+    #     labels.append(Categories[code])
+    # principal_df['Class'] = labels
+    # cluster_with_kmeans(4, principal_components, principal_df)
+    # show_clusters(X_raw)
 
 if __name__ == '__main__':
     main()

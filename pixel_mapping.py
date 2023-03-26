@@ -5,18 +5,20 @@ import os
 import cv2
 
 
-path = 'segmented/test/{}'
+path = 'segmented/train/{}'
 
 
 def mark_image(indexes, label):
     files = os.listdir(path.format(label))
     print(len(indexes))
-    for file in files:
-        img = cv2.imread(path.format(label)+'/'+file, 1)
-        for index in indexes:
-            img[index//256, index%256] = (0, 0, 255)
-        cv2.imwrite("marked/{}/{}".format(label, file), img)
-
+    # for file in files:
+    #     try:
+    #         img = cv2.imread(path.format(label)+'/'+file, 1)
+    #         for index in indexes:
+    #             img[index//256, index%256] = (0, 0, 255)
+    #         cv2.imwrite("marked/{}/{}".format(label, file), img)
+    #     except Exception as err:
+    #         print(err)
 
 
 def map_pixels(coef, labels):

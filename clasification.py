@@ -12,7 +12,7 @@ from kneed import KneeLocator
 
 
 #load dataframe from csv
-training = pd.read_csv('segmented.csv')
+training = pd.read_csv('segmented2.csv')
 # training = pd.read_csv('train_dataset.csv')
 
 
@@ -20,11 +20,9 @@ y = training['Target']
 X_raw = training.drop("Target", axis=1)
 labels = ['COVID19', 'NORMAL', 'PNEUMONIA', 'TUBERCULOSIS']
 
-X_train, X_test, y_train, y_test = train_test_split(X_raw, y, test_size=0.8)
+X_train, X_test, y_train, y_test = train_test_split(X_raw, y, train_size=0.8)
 
 def cross_validation(classifier):
-
-	#
 	# Pass instance of pipeline and training and test data set
 	# cv=10 represents the StratifiedKFold with 10 folds
 	#
@@ -51,25 +49,26 @@ def logistic_regression_classification():
 	y_predict = classifier.predict(X_test)
 	cross_validation(classifier)
 	print(classification_report(y_test, y_predict))
-	# cmd = ConfusionMatrixDisplay.from_predictions(y_test, y_predict, display_labels=labels)
-	# cmd.ax_.set(xlabel="Predicted", ylabel="True")
+	cmd = ConfusionMatrixDisplay.from_predictions(y_test, y_predict, display_labels=labels)
+	cmd.ax_.set(xlabel="Predicted", ylabel="True")
 	# plt.figure(figsize=(8,8))
 	coef = np.absolute(classifier.coef_)
 	import pixel_mapping
 	pixel_mapping.map_pixels(coef, labels)
-	# x_axis = [i for i in range(65536)]
-	# elbow = []
-	# for i in range(0, 4):
-	# 	plt.plot(x_axis, sorted(coef[i], reverse=True), label = labels[i])
-	# 	kn = KneeLocator(x_axis, sorted(coef[i], reverse=True), curve='convex', direction='decreasing')
-	# 	elbow.append(kn.knee)
-	# plt.vlines(np.max(elbow), plt.ylim()[0], plt.ylim()[1], linestyles='dashed')
-	# print('Elbow max: {}'.format(np.max(elbow))) # 19 - 40 depending on random state
-	# indexes = [[], [], [], []]
-	# for i in range(0, 4):
-	# 	important_coefs = sorted(coef[i], reverse=True)[0: np.max(elbow)]
-	# 	for c in important_coefs:
-	# 		indexes[i].append(list(coef[i]).index(c))
+	x_axis = [i for i in range(65536)]
+	elbow = []
+	for i in range(0, 4):
+		plt.plot(x_axis, sorted(coef[i], reverse=True), label = labels[i])
+		kn = KneeLocator(x_axis, sorted(coef[i], reverse=True), curve='convex', direction='decreasing')
+		elbow.append(kn.knee)
+	plt.vlines(np.max(elbow), plt.ylim()[0], plt.ylim()[1], linestyles='dashed')
+	plt.show()
+	print('Elbow max: {}'.format(np.max(elbow))) # 19 - 40 depending on random state
+	indexes = [[], [], [], []]
+	for i in range(0, 4):
+		important_coefs = sorted(coef[i], reverse=True)[0: np.max(elbow)]
+		for c in important_coefs:
+			indexes[i].append(list(coef[i]).index(c))
 	# plt.legend()
 	# plt.show()
 
